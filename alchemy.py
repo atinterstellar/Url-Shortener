@@ -17,6 +17,11 @@ def delete(long):
     cur.execute(command, (long,))
     conn.commit()
 
+def exists(short):
+    command = 'SELECT 1 FROM urls WHERE short = ?'
+    cur.executre(command, (short,))
+    return cur.fetchone() is not None
+
 def fetch(short):
     command = '''SELECT long FROM urls WHERE short = ?'''
     cur.execute(command , (short,))
