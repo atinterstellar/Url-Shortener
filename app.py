@@ -4,7 +4,6 @@ import string
 import db 
 
 app = Flask(__name__)
-shortened = {}
 
 from urllib.parse import urlparse
 
@@ -34,17 +33,19 @@ def index():
         if long_url is None:
             return render_template('index.html',
                                    error="Please enter a valid URL."), 400
-
-        short_url = db.generate()
-        while short_url in db.get_all_urls():
+        if not db.check_short(long_url):
             short_url = db.generate()
-        db.link_to_long(long_url, short_url)
-        return render_template('index.html',
-                               short_url=request.url_root + short_url)
+            while short_url in db.get_all_urls():
+                short_url = db.generate()
+            db.link_to_long(long_url, short_url)
+        else:
+            short_url = db.check_short(long_url)
+        return render_template('index.html', short_url=request.url_root + short_url)
     return render_template('index.html')
+
 @app.route('/<short_url>') 
 def redirect_url(short_url):
-    long_url = shortened.get(short_url)
+    long_url = db.check_long(short_url)
     if long_url:
         return redirect(long_url)
     else:
