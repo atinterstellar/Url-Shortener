@@ -1,0 +1,29 @@
+{% extends "home.html" %}
+{% block title %}Find a short link{% endblock %}
+
+{% block content %}
+<h1>Find a<br>short link.</h1>
+<p class="lede">Enter a long link to see whether it has already been shortened.</p>
+
+{# The field is still named short_url because app.py reads that name. #}
+<form method="post" action="{{ url_for('check_short') }}" class="shorten" novalidate>
+  <label class="sr-only" for="short_url">Long link</label>
+  <input id="short_url" name="short_url" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"
+         placeholder="https://example.com/long/path" required autofocus>
+  <button class="btn" type="submit">Find short link</button>
+</form>
+
+{% if short_url %}
+{% set full = request.url_root ~ short_url %}
+{% set base, code = full.rsplit('/', 1) %}
+<section class="result" aria-label="Short link">
+  <p class="result-url"><span class="pick">{{ base }}/<mark>{{ code }}</mark></span></p>
+  <p class="hint">Click the link to select it, then copy it.</p>
+  <div class="actions">
+    <a class="btn" href="{{ full }}" target="_blank" rel="noopener">Open link</a>
+  </div>
+</section>
+{% elif request.method == 'POST' %}
+<p class="notice" role="status">That link hasn't been shortened yet. <a href="{{ url_for('index') }}">Shorten it</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "home.html" %}
+{% block title %}Find the original link{% endblock %}
+
+{% block content %}
+<h1>Find the<br>original link.</h1>
+<p class="lede">Enter a short code, or a whole short link, to see where it goes.</p>
+
+{# The field is still named short_url because app.py reads that name. #}
+<form method="post" action="{{ url_for('check_long') }}" class="shorten" novalidate>
+  <label class="sr-only" for="short_url">Short link or code</label>
+  <input id="short_url" name="short_url" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+         placeholder="aB3dE9" required autofocus>
+  <button class="btn" type="submit">Find link</button>
+</form>
+
+{% if long_url %}
+<section class="result" aria-label="Original link">
+  <p class="result-url result-url--long"><span class="pick"><mark>{{ long_url }}</mark></span></p>
+  <p class="hint">Click the link to select it, then copy it.</p>
+  <div class="actions">
+    <a class="btn" href="{{ long_url }}" target="_blank" rel="noopener noreferrer">Open link</a>
+  </div>
+</section>
+{% elif request.method == 'POST' %}
+<p class="notice" role="status">No link found for that code. Codes are case-sensitive, so check the capital letters.</p>
+{% endif %}
+{% endblock %}

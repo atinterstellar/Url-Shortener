@@ -26,9 +26,8 @@ def generate(length = 6):
 
 def get_all_urls():
     with closing(_connect()) as conn:
-        conn.execute('SELECT short_url FROM urls')
-        short_urls = [row[0] for row in conn.fetchall()]
-    return short_urls
+        rows = conn.execute("SELECT short_url FROM urls").fetchall()
+        return [row[0] for row in rows]
 
 def link_to_long(long_url, short_url):
     with closing(_connect()) as conn:

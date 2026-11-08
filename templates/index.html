@@ -1,21 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>URL Shortener</h1>
-    <form method="POST" action="{{url_for('index')}}">
-        <input type="text" name="long_url" placeholder="URL">
-        <button type="submit">Shorten</button> 
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        {% if short_url %}
-            <p>Your short link: <a href="{{ short_url }}">{{ short_url }}</a></p>
-        {% endif %}
-    </form>
+  {% extends "home.html" %}
+  {% block title %}Shorten a link{% endblock %}
+
+  {% block content %}
+  <h1>Paste a long link.<br>Get a short one.</h1>
+  <p class="lede">Works with any http or https address. Submit the same link twice and you get the same short link back.</p>
+
+  <form method="post" action="{{ url_for('index') }}" class="shorten{% if error %} is-invalid{% endif %}" novalidate>
+    <label class="sr-only" for="long_url">Long link</label>
+    <input id="long_url" name="long_url" type="text" inputmode="url" autocomplete="off" autocapitalize="off"  spellcheck="false"
+           placeholder="https://example.com/long/path" required
+           {% if error %}aria-invalid="true" aria-describedby="long_url_error"{% endif %}
+           {% if not short_url %}autofocus{% endif %}>
+    <button class="btn" type="submit">Shorten link</button>
+  </form>
+
+  {% if error %}<p class="error" id="long_url_error" role="alert">{{ error }}</p>{% endif %}
+
+  {% if short_url %}
+  {% set base, code = short_url.rsplit('/', 1) %}
+  <section class="result" aria-label="Your short link">
+    <p class="result-url"><span class="pick">{{ base }}/<mark>{{ code }}</mark></span></p>
+    <p class="hint">Click the link to select it, then copy it.</p>
+    <div class="actions">
+      <a class="btn" href="{{ short_url }}" target="_blank" rel="noopener">Open link</a>
+    </div>
+    {% if long_url %}
+    <p class="result-meta">Redirects to <span class="original" title="{{ long_url }}">{{ long_url }}</span></p>
+    {% if long_url|length > short_url|length %}
+    <p class="result-meta">{{ long_url|length - short_url|length }} characters shorter than the original.</p>
+    {% endif %}
+    {% endif %}
+  </section>
+  {% endif %}
+  {% endblock %}
 </body>
 </html>

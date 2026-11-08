@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#D1D5DB">
+  <title>{% block title %}Home{% endblock %} · Shorten</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="{{ url_for('home') }}">shorten</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="{{ url_for('index') }}"{% if request.endpoint == 'index' %} aria-current="page"{% endif %}>Shorten a link</a>
+        <a href="{{ url_for('check_long') }}"{% if request.endpoint == 'check_long' %} aria-current="page"{% endif %}>Find original link</a>
+        <a href="{{ url_for('check_short') }}"{% if request.endpoint == 'check_short' %} aria-current="page"{% endif %}>Find short link</a>
+        <a href="https://github.com/atinterstellar/Url-Shortener">Source</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      {% block content %}
+      <h1>Make long<br>links short.</h1>
+      <p class="lede">Shorten a link, or look one up. Pick what you want to do.</p>
+
+      <nav class="choices" aria-label="What do you want to do?">
+        <a class="choice choice--primary" href="{{ url_for('index') }}">
+          <span class="choice-title">Shorten a link</span>
+          <span class="choice-text">Paste a long link and get a short one.</span>
+        </a>
+        <a class="choice" href="{{ url_for('check_long') }}">
+          <span class="choice-title">Find the original link</span>
+          <span class="choice-text">Enter a short code to see where it goes.</span>
+        </a>
+        <a class="choice" href="{{ url_for('check_short') }}">
+          <span class="choice-title">Find a short link</span>
+          <span class="choice-text">Check whether a long link already has a short one.</span>
+        </a>
+      </nav>
+
+      <details class="how">
+        <summary>How it works</summary>
+        <ol>
+          <li>You paste a link. We check that it's an http or https address and add https:// if you left it off.</li>
+          <li>We give it a random 6-character code and store the pair in a database.</li>
+          <li>Pasting the same link again returns the same code, so nothing is stored twice.</li>
+          <li>Anyone who opens the short link is sent straight to the original.</li>
+        </ol>
+      </details>
+      {% endblock %}
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">Built with Flask and SQLite.</div>
+  </footer>
+</body>
+</html>

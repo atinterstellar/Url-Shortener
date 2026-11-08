@@ -1,0 +1,333 @@
+/* Palette: Nordic Charcoal, Fjord Gray, Cloud Gray, Snow Cream, Warm Wood.
+   Overcast page, cream cards, charcoal for type, cedar for whatever you act on. */
+:root {
+  --charcoal: #1F2933;
+  --fjord: #6B7280;
+  --cloud: #D1D5DB;
+  --snow: #F7F7F2;
+  --wood: #A68A64;
+  --muted: rgb(31 41 51 / 0.72);
+  --error: #8F2D2D;
+
+  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --measure: 56rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--cloud);
+  color: var(--charcoal);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+::selection { background: var(--wood); color: var(--charcoal); }
+
+.wrap {
+  width: 100%;
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 2rem);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Header */
+
+.site-header { padding-block: 1.5rem; }
+
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+}
+
+.wordmark {
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variation-settings: "wdth" 80;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+.site-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; }
+
+.site-nav a { padding-block: 0.25rem; color: var(--charcoal); text-decoration: none; }
+
+.site-nav a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+
+.site-nav a[aria-current="page"] { box-shadow: inset 0 -0.4em 0 var(--wood); }
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--charcoal);
+  outline-offset: 3px;
+}
+
+/* Page */
+
+main { flex: 1; padding-block: clamp(2rem, 8vw, 5rem) 4rem; }
+
+main a {
+  color: var(--charcoal);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.2em;
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  font-variation-settings: "wdth" 78;
+  text-wrap: balance;
+}
+
+.lede { max-width: 34rem; margin: 0 0 2.25rem; color: var(--muted); }
+
+/* Form: the field lifts when you click into it, and the button turns cedar
+   once there is something to shorten. All CSS, no scripts. */
+
+.shorten {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 2px solid var(--charcoal);
+  border-radius: 0.5rem;
+  background: var(--snow);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.shorten:focus-within {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--wood);
+  outline: 2px solid var(--charcoal);
+  outline-offset: 2px;
+}
+
+.shorten.is-invalid { border-color: var(--error); }
+
+.shorten input {
+  flex: 1;
+  min-width: 0;
+  padding: 1.1rem 1.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--charcoal);
+  font: 500 1.0625rem/1.2 var(--font-mono);
+}
+
+.shorten input:focus { outline: none; }
+
+.shorten input::placeholder { color: var(--muted); opacity: 1; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.4rem;
+  border: 2px solid var(--charcoal);
+  background: var(--charcoal);
+  color: var(--snow);
+  font: 700 1rem/1.2 var(--font-sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+
+.btn:hover { background: var(--wood); color: var(--charcoal); }
+
+.btn:active { transform: translateY(1px); }
+
+.shorten .btn {
+  padding-block: 1.1rem;
+  border: 0;
+  border-left: 2px solid var(--charcoal);
+  border-radius: 0;
+}
+
+.shorten:has(input:not(:placeholder-shown)) .btn { background: var(--wood); color: var(--charcoal); }
+
+.shorten:has(input:not(:placeholder-shown)) .btn:hover { background: var(--charcoal); color: var(--snow); }
+
+.actions .btn { border-radius: 0.5rem; }
+
+.error { margin: 0.875rem 0 0; color: var(--error); font-weight: 600; }
+
+.notice { margin: 1.5rem 0 0; font-weight: 600; }
+
+@media (max-width: 40rem) {
+  .shorten { flex-direction: column; }
+  .shorten .btn { border-left: 0; border-top: 2px solid var(--charcoal); }
+}
+
+/* Result */
+
+.result { margin-top: 2.5rem; padding-top: 2rem; border-top: 2px solid var(--charcoal); }
+
+.result-url {
+  margin: 0 0 0.75rem;
+  font: 500 clamp(1.375rem, 4.6vw, 2.5rem)/1.25 var(--font-mono);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.result-url--long { font-size: clamp(1rem, 2.6vw, 1.375rem); letter-spacing: 0; }
+
+/* One click selects the whole link, so it can be copied without a script. */
+.pick { cursor: pointer; user-select: all; -webkit-user-select: all; }
+
+.hint { margin: 0 0 1.5rem; color: var(--muted); font-size: 0.9375rem; }
+
+mark {
+  margin-inline: -0.15em;
+  padding-inline: 0.15em;
+  color: var(--charcoal);
+  background: linear-gradient(var(--wood), var(--wood)) no-repeat left center / 0 100%;
+  white-space: nowrap;
+  animation: sweep 0.8s 0.2s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+/* A long original URL has to wrap; the short code never should. */
+.result-url--long mark { white-space: normal; overflow-wrap: anywhere; }
+
+@keyframes sweep { to { background-size: 100% 100%; } }
+
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+
+.result-meta { margin: 1.75rem 0 0; color: var(--muted); font-size: 0.9375rem; }
+
+.original {
+  display: block;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  font: 400 0.875rem/1.4 var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Home: three ways in. The first is the main job, so it is the solid one. */
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+  min-height: 12rem;
+  padding: 1.25rem 1.25rem 1.5rem;
+  border: 2px solid var(--charcoal);
+  border-radius: 0.5rem;
+  background: var(--snow);
+  color: var(--charcoal);
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.choice:hover,
+.choice:focus-visible {
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0 var(--wood);
+}
+
+.choice:active { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--wood); }
+
+.choice--primary { background: var(--charcoal); color: var(--snow); }
+
+.choice-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variation-settings: "wdth" 85;
+}
+
+.choice-text { color: var(--muted); }
+
+.choice--primary .choice-text { color: rgb(247 247 242 / 0.8); }
+
+/* How it works: a real sequence, so the steps are numbered */
+
+.how { margin-top: 3.5rem; border-top: 2px solid var(--charcoal); }
+
+.how summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.how summary::-webkit-details-marker { display: none; }
+
+.how summary::after {
+  content: "+";
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--charcoal);
+  border-radius: 50%;
+  font: 700 1.125rem/1 var(--font-sans);
+  transition: background-color 0.12s;
+}
+
+.how summary:hover::after { background: var(--wood); }
+
+.how[open] summary::after { content: "\2212"; background: var(--charcoal); color: var(--snow); }
+
+.how ol { max-width: 36rem; margin: 0; padding: 0 0 1.5rem 1.25rem; }
+
+.how li { padding-left: 0.5rem; margin-bottom: 0.75rem; }
+
+.how li::marker { color: var(--charcoal); font-weight: 800; }
+
+/* Footer */
+
+.site-footer {
+  padding-block: 1.5rem 2rem;
+  border-top: 1px solid var(--fjord);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shorten, .btn, .choice, .how summary::after { transition: none; }
+  .btn:active { transform: none; }
+  mark { animation: none; background-size: 100% 100%; }
+}
