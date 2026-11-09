@@ -7,6 +7,8 @@ app = Flask(__name__)
 
 from urllib.parse import urlparse
 
+db.init_db() 
+
 def normalize_url(raw):
     url = raw.strip()
     if not url or len(url) > 2048:
@@ -53,17 +55,21 @@ def redirect_url(short_url):
 
 @app.route('/check-long', methods=['GET', 'POST'])
 def check_long():
+    long_url = None
     if request.method == 'POST':
-        short_url = request.form.get('short_url')
-        long_url = db.check_long(short_url)
-    return render_template('check_long.html', long_url = long_url ) 
+        raw = request.form.get('short_url', '').strip()
+        code = raw.rstrip('/').rsplit('/', 1)[-1]   # accepts full short URL or just the code
+        long_url = db.check_long(code)
+    return render_template('check_long.html', long_url=long_url)
 
 @app.route('/check-short', methods=['GET', 'POST'])
 def check_short():
+    short_url = None
     if request.method == 'POST':
-        long_url = request.form.get('short_url')
-        short_url = db.check_short(long_url)
-    return render_template('check_short.html', short_url = short_url ) 
+        long_url = normalize_url(request.form.get('short_url', ''))
+        if long_url:
+            short_url = db.check_short(long_url)
+    return render_template('check_short.html', short_url=short_url)
 
 if __name__ == '__main__':
     app.run(debug=True , port = 5005)

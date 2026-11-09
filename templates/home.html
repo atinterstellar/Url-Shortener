@@ -13,7 +13,7 @@
 <body>
   <header class="site-header">
     <div class="wrap">
-      <a class="wordmark" href="{{ url_for('home') }}">shorten</a>
+      <a class="wordmark" href="{{ url_for('home') }}">shortr</a>
       <nav class="site-nav" aria-label="Main">
         <a href="{{ url_for('index') }}"{% if request.endpoint == 'index' %} aria-current="page"{% endif %}>Shorten a link</a>
         <a href="{{ url_for('check_long') }}"{% if request.endpoint == 'check_long' %} aria-current="page"{% endif %}>Find original link</a>
