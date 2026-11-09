@@ -2,8 +2,11 @@ import random
 from flask import Flask , render_template, url_for , redirect , request
 import string
 import db 
+import os
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 from urllib.parse import urlparse
 
@@ -72,5 +75,5 @@ def check_short():
     return render_template('check_short.html', short_url=short_url)
 
 if __name__ == '__main__':
-    app.run(debug=True , port = 5005)
-
+    app.run(debug=os.environ.get("FLASK_DEBUG") == "1",
+            port=int(os.environ.get("PORT", 5005)))

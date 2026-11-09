@@ -2,8 +2,9 @@ import sqlite3
 import random
 import string
 from contextlib import closing
+import os
 
-path = "urls.db"
+path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "urls.db")
 chars = string.ascii_letters + string.digits
 
 def _connect():
