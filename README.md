@@ -2,7 +2,8 @@
 
 A small URL shortener built with Flask and SQLite. Paste a long link, get a 6-character short link that redirects to it. Submitting the same URL twice returns the same short code.
 
-<!-- Add a screenshot here: ![Screenshot](docs/screenshot.png) -->
+<img width="1470" height="956" alt="Screenshot 2026-11-09 at 12 27 37 PM" src="https://github.com/user-attachments/assets/8270c9e9-fac8-4ba8-b015-811eb5cd6a0d" />
+ 
 
 ## Features
 
